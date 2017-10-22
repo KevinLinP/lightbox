@@ -1,7 +1,44 @@
 import { Meteor } from 'meteor/meteor';
-//import { chokidar } from 'chokidar';
 
 import { Programs } from '../../api/programs.js';
+
+const callEmscripten = (path) => {
+  const { exec } = require('child_process');
+  const tempPath = Meteor.absolutePath + '/.emscripten/output/program.js';
+
+  let command = Meteor.absolutePath + '/.emscripten/emcc';
+  command += ' -o ' + tempPath;
+  command += ' ' + path;
+
+  console.log(command);
+
+  const execCallback = (error, stdout, stderr) => {
+    if (!error) {
+      readEmscriptenOutput(tempPath);
+    } else {
+      console.log('exec error: ' + error);
+    }
+  };
+
+  exec(command, {}, Meteor.bindEnvironment(execCallback));
+};
+
+const readEmscriptenOutput = (tempPath) => {
+  const fs = require('fs');
+  const readFileCallback = (err, data) => {
+    if (!err) {
+      const program = Programs.findOne({});
+
+      //Programs.update(program._id, {
+        //$set: {jsCode: data}
+      //});
+    } else {
+      console.log('output read error: ' + err);
+    }
+  };
+
+  fs.readFile(tempPath, 'utf8', Meteor.bindEnvironment(readFileCallback));
+};
 
 if (Meteor.isServer) {
   Meteor.startup(() => {
@@ -9,13 +46,18 @@ if (Meteor.isServer) {
 
     const programsDir = Meteor.absolutePath + '/led_programs';
     const watchOptions = {persistent: true};
+
     const onChangeCallback = (path) => {
       const fs = require('fs');
       const readFileCallback = (err, data) => {
         if (!err) {
           const program = Programs.findOne({});
-          console.log(program);
-          Programs.update(program._id, {cCode: data});
+          Programs.update(program._id, {
+            $set: {cCode: data}
+          });
+          callEmscripten(path);
+        } else {
+          console.log('source read error: ' + err);
         }
       };
 
