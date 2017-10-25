@@ -6,9 +6,9 @@ const callEmscripten = (path) => {
   const { exec } = require('child_process');
   const tempPath = Meteor.absolutePath + '/.emscripten/output/program.js';
 
-  let command = Meteor.absolutePath + '/.emscripten/emcc';
+  let command = Meteor.absolutePath + '/.emscripten/em++';
   command += ' -o ' + tempPath;
-  command += ' -s ' + "EXPORTED_FUNCTIONS=\"['_int_sqrt']\"";
+  command += ' -s ' + "EXPORTED_FUNCTIONS=\"['_loopAndPopulateArray']\"";
   command += ' ' + path;
 
   console.log(command);
@@ -25,10 +25,11 @@ const callEmscripten = (path) => {
 
       readEmscriptenOutput(tempPath);
     } else {
+      console.log(error);
       Programs.update(program._id, {
         $set: {
           jsCode: null,
-          compileError: error
+          compileError: stderr
         }
       });
     }
