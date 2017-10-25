@@ -8,15 +8,29 @@ const callEmscripten = (path) => {
 
   let command = Meteor.absolutePath + '/.emscripten/emcc';
   command += ' -o ' + tempPath;
+  command += ' -s ' + "EXPORTED_FUNCTIONS=\"['_int_sqrt']\"";
   command += ' ' + path;
 
   console.log(command);
 
   const execCallback = (error, stdout, stderr) => {
+    const program = Programs.findOne({});
+
     if (!error) {
+      Programs.update(program._id, {
+        $set: {
+          compileError: null
+        }
+      });
+
       readEmscriptenOutput(tempPath);
     } else {
-      console.log('exec error: ' + error);
+      Programs.update(program._id, {
+        $set: {
+          jsCode: null,
+          compileError: error
+        }
+      });
     }
   };
 
@@ -29,9 +43,9 @@ const readEmscriptenOutput = (tempPath) => {
     if (!err) {
       const program = Programs.findOne({});
 
-      //Programs.update(program._id, {
-        //$set: {jsCode: data}
-      //});
+      Programs.update(program._id, {
+        $set: {jsCode: data}
+      });
     } else {
       console.log('output read error: ' + err);
     }

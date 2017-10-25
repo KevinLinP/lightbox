@@ -1,6 +1,12 @@
-#include <stdio.h>
+/*#include <stdio.h>*/
 
-int main() {
-  printf("Hello, world!\n");
-  return 0;
+/*int main() {*/
+  /*printf("hello, world!\n");*/
+  /*return 0;*/
+/*}*/
+
+#include <math.h>
+
+int int_sqrt(int x) {
+  return sqrt(x);
 }
