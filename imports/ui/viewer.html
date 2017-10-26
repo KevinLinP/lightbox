@@ -7,6 +7,8 @@
             {{program.compileError}}
           </pre>
         {{/if}}
+
+        {{ > ledSvg }}
       </div>
 
       <div class="col-4">
@@ -21,7 +23,24 @@
     <script type="text/javascript" src="/led-display.js"></script>
   {{/if}}
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js" integrity="sha256-xOOIPEIJM2Hn3GVaZs+VnM9J3rtaeUuHcHRXuJNO+JU=" crossorigin="anonymous"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
+
+<template name="ledSvg">
+  <div>
+    <svg
+      id="led-svg"
+      class="img-fluid"
+      version="1.1"
+      baseProfile="full"
+      viewbox="0 0 1200 900"
+      xmlns="http://www.w3.org/2000/svg">
+      <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+      </filter>
+    </svg>
+  </div>
+</template>
