@@ -1,18 +1,16 @@
-class LedDisplay {
+export default class LedDisplay {
   constructor() {
     this.width = 12;
     this.height = 9;
     this.nDataBytes = this.width * this.height * 3;
-
-    this.reset();
   }
 
-  reset() {
+  reset(emscripten) {
     if (this.intervalId) {
       window.clearInterval(this.intervalId);
     }
 
-    this.emscripten = window.emscripten;
+    this.emscripten = emscripten;
     this.dataPtr = this.emscripten._malloc(this.nDataBytes);
     this.dataBuffer = new Uint8Array(this.emscripten.HEAPU8.buffer, this.dataPtr, this.nDataBytes);
     this.wrappedLoopFunc = this.emscripten.cwrap('loopAndPopulateArray', 'number', ['number'], [this.dataBuffer.byteOffset]);
@@ -57,4 +55,4 @@ class LedDisplay {
   }
 }
 
-window.ledDisplay = new LedDisplay();
+this.window.ledDisplay = new LedDisplay(); // TODO: wtf -_-
