@@ -1,5 +1,4 @@
 #include "FastLED/pixeltypes.h"
-#include <stdio.h>
 
 #define Y_LENGTH 9
 #define X_LENGTH 12

@@ -1,26 +1,27 @@
 <body>
-  <pre>{{program.cCode}}</pre>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-8">
+        {{#if program.compileError}}
+          <pre>
+            {{program.compileError}}
+          </pre>
+        {{/if}}
+      </div>
 
-  <hr/>
-
-  {{#if program.compileError}}
-    <pre>
-      {{program.compileError}}
-    </pre>
-  {{/if}}
+      <div class="col-4">
+        <pre><code>{{program.cCode}}</code></pre>
+      </div>
+    </div>
+  </div>
 
   {{#if program.jsCode}}
     <script type="text/javascript">{{program.jsCode}}</script>
-    <script type="text/javascript">
-      var nDataBytes = 9 * 12 * 3;
-      var dataPtr = Module._malloc(nDataBytes);
-      window.frameData = new Uint8Array(Module.HEAPU8.buffer, dataPtr, nDataBytes);
-
-      window.nextFrame = function() {
-        Module.ccall('loopAndPopulateArray', 'number', ['number'], [window.frameData.byteOffset]);
-        window.frame = new Uint8Array(window.frameData.buffer, window.frameData.byteOffset, 9 * 12 * 3);
-      };
-    </script>
+    <script type="text/javascript">window.emscripten = Module;</script>
+    <script type="text/javascript" src="/led-display.js"></script>
   {{/if}}
 
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
