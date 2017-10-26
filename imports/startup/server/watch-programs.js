@@ -71,7 +71,7 @@ if (Meteor.isServer) {
           Programs.update(program._id, {
             $set: {cCode: data}
           });
-          callEmscripten(path);
+          callEmscripten(programsDir + '/program.c');
         } else {
           console.log('source read error: ' + err);
         }

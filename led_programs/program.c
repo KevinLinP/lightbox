@@ -15,7 +15,7 @@ void loop() {
     fill_rainbow(leds[y], X_LENGTH, startHue);
   }
 
-  startHue = (startHue + 2) % 256;
+  startHue = (startHue + 1) % 256;
 }
 
 void loopAndPopulateArray(uint8_t *array) {
