@@ -11,7 +11,7 @@ CHSV leds[Y_LENGTH][X_LENGTH];
 uint16_t frameCounter = 0;
 
 void loop() {
-  uint8_t hue = (frameCounter % 256);
+  uint8_t hue = (frameCounter % 512) / 2;
   for (int y = 0; y < Y_LENGTH; y++) {
     fill_rainbow(leds[y], X_LENGTH, hue);
   }

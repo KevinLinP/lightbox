@@ -1,20 +1,12 @@
 <body>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-8">
-        {{#if program.compileError}}
-          <pre>
-            {{program.compileError}}
-          </pre>
-        {{/if}}
+    {{#if program.compileError}}
+      <pre>
+        {{program.compileError}}
+      </pre>
+    {{/if}}
 
-        {{ > ledSvg }}
-      </div>
-
-      <div class="col-4">
-        <pre><code>{{program.cCode}}</code></pre>
-      </div>
-    </div>
+    {{ > ledSvg }}
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.11.0/d3.js" integrity="sha256-xOOIPEIJM2Hn3GVaZs+VnM9J3rtaeUuHcHRXuJNO+JU=" crossorigin="anonymous"></script>
