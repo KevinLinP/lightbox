@@ -1,8 +1,10 @@
 #define FASTLED_INTERNAL
 #define __PROG_TYPES_COMPAT__
 
-#include <stdint.h>
 #include <math.h>
+#include <stdint.h>
+
+#include "FastLED.h"
 
 FASTLED_NAMESPACE_BEGIN
 

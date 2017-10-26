@@ -1,15 +1,10 @@
-#ifndef FASTLED_NAMESPACE_BEGIN
-#define FASTLED_NAMESPACE_BEGIN
-#define FASTLED_NAMESPACE_END
-#define FASTLED_USING_NAMESPACE
-#endif
-
 #ifndef __INC_COLORUTILS_H
 #define __INC_COLORUTILS_H
 
 ///@file colorutils.h
 /// functions for color fill, paletters, blending, and more
 
+#include "FastLED.h"
 #include "pixeltypes.h"
 #include "fastled_progmem.h"
 

@@ -1,6 +1,4 @@
-#include "FastLED/pixeltypes.h"
-#include "FastLED/colorutils.h"
-#include "FastLED/colorutils.cpp"
+#include "FastLED/FastLED.h"
 
 #define Y_LENGTH 9
 #define X_LENGTH 12
@@ -25,11 +23,11 @@ void loopAndPopulateArray(uint8_t *array) {
 
   for (int y = 0; y < Y_LENGTH; y++) {
     for (int x = 0; x < X_LENGTH; x++) {
-      CHSV led = leds[y][x];
+      CRGB led = leds[y][x]; // converting here!
 
-      array[i++] = led.hue;
-      array[i++] = led.sat;
-      array[i++] = led.val;
+      array[i++] = led.r;
+      array[i++] = led.g;
+      array[i++] = led.b;
     }
   }
 }

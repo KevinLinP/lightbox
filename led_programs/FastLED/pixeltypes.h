@@ -1,11 +1,7 @@
-#ifndef FASTLED_NAMESPACE_BEGIN
-#define FASTLED_NAMESPACE_BEGIN
-#define FASTLED_NAMESPACE_END
-#define FASTLED_USING_NAMESPACE
-#endif
-
 #ifndef __INC_PIXELS_H
 #define __INC_PIXELS_H
+
+#include "FastLED.h"
 
 #include <stdint.h>
 #include "lib8tion.h"

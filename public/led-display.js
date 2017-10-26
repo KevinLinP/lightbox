@@ -39,44 +39,21 @@ class LedDisplay {
     return leds;
   }
 
-  // ripped from https://github.com/bgrins/TinyColor
-  // Converts an HSV color value to RGB.
-  // *Assumes:* h is contained in [0, 1] and s and v are contained in [0, 1]
-  // *Returns:* { r, g, b } in the set [0, 255]
-  hsvToRgb(h, s, v) {
-    h = h * 6;
-    s = s;
-    v = v;
-
-    var i = Math.floor(h),
-      f = h - i,
-      p = v * (1 - s),
-      q = v * (1 - f * s),
-      t = v * (1 - (1 - f) * s),
-      mod = i % 6,
-      r = [v, q, p, p, t, v][mod],
-      g = [t, v, v, q, p, p][mod],
-      b = [p, p, t, v, v, q][mod];
-
-    return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
-  }
-
-  applyMbostockMagic(hsvLeds) {
+  applyMbostockMagic(leds) {
     const svgContainer = d3.select('#led-svg').attr('viewBox', '0 0 1200 900').style('background-color', 'black');
-    const rowGroups = svgContainer.selectAll('g').data(hsvLeds)
+    const rowGroups = svgContainer.selectAll('g').data(leds)
     rowGroups.enter().append('g').attr('transform', (d, i) => {return `translate(50, ${50 + (i * 100)})`});
 
     const circles = rowGroups.merge(rowGroups).selectAll('circle').data((d) => { return d;});
     circles.enter().append('circle').attr('r', 25).attr('cx', (d, i) => {return i * 100;});
     circles.merge(circles).attr('fill', (d) => {
-      const {r, g, b} = this.hsvToRgb(d[0] / 255.0, d[1] / 255.0, d[2] / 255.0);
-      return `rgb(${r}, ${g}, ${b})`;
+      return `rgb(${d[0]}, ${d[1]}, ${d[2]})`;
     });
   }
 
   loop() {
-    const hsvLeds = this.getLeds();
-    this.applyMbostockMagic(hsvLeds);
+    const leds = this.getLeds();
+    this.applyMbostockMagic(leds);
   }
 }
 
