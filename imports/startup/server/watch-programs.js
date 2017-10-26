@@ -9,6 +9,7 @@ const callEmscripten = (path) => {
   let command = Meteor.absolutePath + '/.emscripten/em++';
   command += ' -o ' + tempPath;
   command += ' -s ' + "EXPORTED_FUNCTIONS=\"['_loopAndPopulateArray']\"";
+  command += ' -s ' + "ERROR_ON_UNDEFINED_SYMBOLS=1";
   command += ' ' + path;
 
   console.log(command);

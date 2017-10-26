@@ -17,7 +17,7 @@ class LedDisplay {
     this.dataBuffer = new Uint8Array(this.emscripten.HEAPU8.buffer, this.dataPtr, this.nDataBytes);
     this.wrappedLoopFunc = this.emscripten.cwrap('loopAndPopulateArray', 'number', ['number'], [this.dataBuffer.byteOffset]);
 
-    this.intervalId = window.setInterval(this.loop.bind(this), 1000);
+    this.intervalId = window.setInterval(this.loop.bind(this), 16);
   }
 
   getLeds() {
@@ -58,24 +58,25 @@ class LedDisplay {
       g = [t, v, v, q, p, p][mod],
       b = [p, p, t, v, v, q][mod];
 
-    return { r: r * 255, g: g * 255, b: b * 255 };
+    return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+  }
+
+  applyMbostockMagic(hsvLeds) {
+    const svgContainer = d3.select('#led-svg').attr('viewBox', '0 0 1200 900').style('background-color', 'black');
+    const rowGroups = svgContainer.selectAll('g').data(hsvLeds)
+    rowGroups.enter().append('g').attr('transform', (d, i) => {return `translate(50, ${50 + (i * 100)})`});
+
+    const circles = rowGroups.merge(rowGroups).selectAll('circle').data((d) => { return d;});
+    circles.enter().append('circle').attr('r', 25).attr('cx', (d, i) => {return i * 100;});
+    circles.merge(circles).attr('fill', (d) => {
+      const {r, g, b} = this.hsvToRgb(d[0] / 255.0, d[1] / 255.0, d[2] / 255.0);
+      return `rgb(${r}, ${g}, ${b})`;
+    });
   }
 
   loop() {
-    const leds = this.getLeds();
-    
-    const svgContainer = d3.select('#led-svg').style('background-color', 'black');
-    const rowGroups = svgContainer.selectAll('g').data(leds).enter().append('g');
-    rowGroups.attr('transform', (d, i) => {return `translate(50, ${50 + (i * 100)})`});
-
-    const circle = rowGroups.selectAll('circle').data((d) => { console.log(d); return d;}).enter().append('circle');
-    circle.attr('r', 25).attr('cx', (d, i) => {return i * 100;}).attr('fill', (d) => {
-      const {r, g, b} = this.hsvToRgb(d[0] / 255.0, d[1] / 255.0, d[2] / 255.0);
-      return `rgb(${r}, ${g}, ${b})`;
-    }).attr('filter', 'url(#blur)')
-
-    //let circles = d3.select('#led-svg').selectAll('circle').data([1, 2, 3, 4, 5]).enter().append('circle');
-    //circles.attr('cx', (d, i) => { return 50 + (i * 100);}).attr('cy', 50).attr('r', (d) => { return d * d}).style('fill', 'black');
+    const hsvLeds = this.getLeds();
+    this.applyMbostockMagic(hsvLeds);
   }
 }
 

@@ -1,4 +1,6 @@
 #include "FastLED/pixeltypes.h"
+#include "FastLED/colorutils.h"
+#include "FastLED/colorutils.cpp"
 
 #define Y_LENGTH 9
 #define X_LENGTH 12
@@ -6,13 +8,14 @@
 extern "C" {
 
 CHSV leds[Y_LENGTH][X_LENGTH];
+int startHue = 0;
 
 void loop() {
   for (int y = 0; y < Y_LENGTH; y++) {
-    for (int x = 0; x < X_LENGTH; x++) {
-      leds[y][x] = CHSV(HUE_ORANGE, 255, 255);
-    }
+    fill_rainbow(leds[y], X_LENGTH, startHue);
   }
+
+  startHue = (startHue + 2) % 256;
 }
 
 void loopAndPopulateArray(uint8_t *array) {
