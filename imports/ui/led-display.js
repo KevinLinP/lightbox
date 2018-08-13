@@ -38,9 +38,10 @@ export default class LedDisplay {
   }
 
   applyMbostockMagic(leds) {
-    const svgContainer = d3.select('#led-svg').attr('viewBox', '0 0 1200 900').style('background-color', 'black');
-    const rowGroups = svgContainer.selectAll('g').data(leds)
-    rowGroups.enter().append('g').attr('transform', (d, i) => {return `translate(50, ${50 + (i * 100)})`});
+    const svg = d3.select('#led-svg').attr('viewBox', '0 0 1200 900').style('background-color', 'black');
+    const ledContainer = svg.select('#led-container').attr('transform', 'translate(50, 50)'); // .style('filter', 'url(#blur)');
+    const rowGroups = ledContainer.selectAll('g').data(leds);
+    rowGroups.enter().append('g').attr('transform', (d, i) => {return `translate(0, ${i * 100})`});
 
     const circles = rowGroups.merge(rowGroups).selectAll('circle').data((d) => { return d;});
     circles.enter().append('circle').attr('r', 25).attr('cx', (d, i) => {return i * 100;});
