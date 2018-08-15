@@ -20,14 +20,15 @@ void sweepingRainbow() {
 }
 
 void rotatingRainbow() {
-  const uint8_t HUE_VARIANCE = 20;
-  uint8_t angle = 256 - (frameCounter % 1792) / 7;
+  const uint8_t HUE_VARIANCE = 25;
+  uint8_t angle = (frameCounter % 4096) / 16;
   uint8_t startHue = (frameCounter % 512) / 2;
-  float yHueDist = ((-128.0 + cos8(angle)) / 128.0) * HUE_VARIANCE;
-  float xHueDist = ((-128.0 + sin8(angle)) / 128.0) * HUE_VARIANCE;
+  float yHueDist = ((-128.0 + sin8(angle)) / 128.0) * HUE_VARIANCE;
+  float xHueDist = ((-128.0 + cos8(angle)) / 128.0) * HUE_VARIANCE;
 
   for (int y = 0; y < Y_LENGTH; y++) {
     uint8_t thisStartHue = startHue + (yHueDist * y);
+
     for (int x = 0; x < X_LENGTH; x++) {
       uint8_t thisHue = thisStartHue + (xHueDist * x);
       leds[y][x] = CHSV(thisHue, 255, 255);
