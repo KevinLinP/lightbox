@@ -11,7 +11,7 @@ CHSV leds[Y_LENGTH][X_LENGTH];
 uint16_t frameCounter = 0;
 
 void sweepingRainbow() {
-  uint8_t startHue = (frameCounter % 256);
+  uint8_t startHue = (frameCounter % 512);
   for (int y = 0; y < Y_LENGTH; y++) {
     uint8_t thisStartHue = startHue + (10 * y);
 
@@ -20,18 +20,31 @@ void sweepingRainbow() {
 }
 
 void rotatingRainbow() {
-  const uint8_t HUE_VARIANCE = 25;
-  uint8_t angle = (frameCounter % 4096) / 16;
-  uint8_t startHue = (frameCounter % 512) / 2;
-  float yHueDist = ((-128.0 + sin8(angle)) / 128.0) * HUE_VARIANCE;
-  float xHueDist = ((-128.0 + cos8(angle)) / 128.0) * HUE_VARIANCE;
+  /*uint8_t startHue = (frameCounter % 1024) / 4;*/
+  uint8_t startHue = 0;
+  uint8_t angle = (frameCounter % 512) / 2;
+  /*int8_t xHueDelta = sin8(angle) - 128;*/
+  int8_t xHueDelta = 0;
+  uint8_t yHueDelta = cos8(angle);
+
+  CHSV rowStartColors[Y_LENGTH];
+  if (yHueDelta >= 128) {
+    yHueDelta = 255 - yHueDelta;
+  }
+
+  if (angle <= 127) {
+    fill_gradient(rowStartColors, 0, CHSV(startHue, 255, 255), Y_LENGTH, CHSV((startHue + yHueDelta), 255, 255));
+  } else {
+    fill_gradient(rowStartColors, 0, CHSV(startHue - yHueDelta, 255, 255), Y_LENGTH, CHSV((startHue), 255, 255));
+  }
 
   for (int y = 0; y < Y_LENGTH; y++) {
-    uint8_t thisStartHue = startHue + (yHueDist * y);
+    CHSV rowStartColor = rowStartColors[y];
 
-    for (int x = 0; x < X_LENGTH; x++) {
-      uint8_t thisHue = thisStartHue + (xHueDist * x);
-      leds[y][x] = CHSV(thisHue, 255, 255);
+    if (xHueDelta >= 0) {
+      fill_gradient(leds[y], 0, rowStartColor, X_LENGTH, CHSV(rowStartColor.hue + xHueDelta, 255, 255), FORWARD_HUES);
+    } else {
+      fill_gradient(leds[y], 0, CHSV(rowStartColor.hue + xHueDelta, 255, 255), X_LENGTH, rowStartColor, FORWARD_HUES);
     }
   }
 }
