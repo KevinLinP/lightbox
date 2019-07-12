@@ -1,2 +1,3 @@
+led_programs/program.c
 node_modules/
 .emscripten
